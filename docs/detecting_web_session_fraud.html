@@ -15608,7 +15608,11 @@ We now have three sparse matrices to feed into different classification models. 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">run_random_forest</span><span class="p">(</span><span class="n">train_dict</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Takes a dictionary of time-dependent datasets and associated target value (must be the same for all datasets) </span>
+<span class="sd">    and outputs an average cross-validation score from a random forest classifier. </span>
+<span class="sd">    </span>
+<span class="sd">    Default n_estimators = 50</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">forest_scores</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># instantiate a list to keep track of cross-val scores</span>
     <span class="n">time_split</span> <span class="o">=</span> <span class="n">TimeSeriesSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># define a cross-val generator with 5 splits</span>
     <span class="n">forest</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># define a random forest with n_estimators</span>
@@ -15726,8 +15730,16 @@ We now have three sparse matrices to feed into different classification models. 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Logistic Regression</strong></p>
+<p>From these results, the best performing dataset seems to be the second one which included polynomial time features. Perhaps the other two did not have enough features columns to be effective. Because random forests randomly pick features with replacement when building trees, providing more features to choose from allows the trees to be more <em>decorrelated</em> and therefore reduce overfitting. Additionally, increasing the number of estimators should help our scores as more combinations of features are considered.</p>
+<p>However, these calculations cost us over 10 minutes for scores almost all below 80%. Let's see if we can switch to the simplest classification model and go back to the basics.</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="3.2.-Logistic-Regression">3.2. Logistic Regression<a class="anchor-link" href="#3.2.-Logistic-Regression">&#182;</a></h3>
 </div>
 </div>
 </div>
