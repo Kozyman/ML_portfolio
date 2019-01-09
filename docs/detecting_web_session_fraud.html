@@ -13125,15 +13125,15 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Part-0.-Problem-Statement">Part 0. Problem Statement<a class="anchor-link" href="#Part-0.-Problem-Statement">&#182;</a></h2><p>Storing a consumer's behavioral data is quickly becoming standard operating procedure as a growing range of industries look to provide users with customized experiences. Ranging from banking<sup><a href="http://www.bbc.com/storyworks/banking-on-innovation/bigdata">[1]</a></sup> and transportation<sup><a href="https://datafloq.com/read/southwest-airlines-uses-big-data-deliver-excellent/371">[2]</a></sup> to even fashion<sup><a href="https://medium.com/datadriveninvestor/how-the-fashion-industry-is-using-data-science-33c9b2739ef6">[3]</a></sup> and food<sup><a href="https://www.wsj.com/articles/how-restaurants-are-using-big-data-as-a-competitive-tool-1538515392">[4]</a></sup>, businesses are relying on this data to improve their services. But as they continue to do so, it becomes increasingly important to determine if <em>unauthorized</em> activity ever occurs. Whether it's catching fraudulent credit card purchases or flagging incendiary social media bots, there are few who won't benefit from this technology.</p>
-<p>In this article, we will explore one of the more obvious applications of this strategy by attempting to categorize web sessions between those of an authorized user surfing the web and those of a nefarious third-party hoping to sway customized results (such as ads and suggested content) away from the user's interests or visit less-than-savory websites to spread viruses. Since the data used in this project is for purely for test purposes, let's consider identifying the optimal model and tuning its hyperparameters as beyond our scope; instead, can take a look at how different modeling classifiers perform with this task and how feature engineering can help. We will look at model tuning in a later article.</p>
+<p>In this article, we will explore one of the more obvious applications of this strategy by attempting to categorize web sessions between those of an authorized user surfing the web and those of a nefarious third-party hoping to sway customized results (such as ads and suggested content) away from the user's interests. Since the data used in this project is purely for test purposes, let's look at how different modeling classifiers perform with this task, and how feature engineering may help achieve better results. We will consider model optimization and hyperparameter tuning in a later article.</p>
 <p>To define our strategy more concretely, we will perform the following steps:</p>
 <ol>
-<li><strong>Framing the problem</strong> - <em>you are here!...</em></li>
+<li><strong>Framing the problem</strong> - <em>you are here!</em></li>
 <li><strong>Data pre-processing</strong> - <em>we import and clean the raw data of errors, missing values, and unhelpful formats</em></li>
 <li><strong>Exploratory data analysis</strong> - <em>we identify trends, select features, and create our training datasets</em></li>
 <li><strong>Modeling and testing</strong> - <em>weigh the benefits (and detriments) of various modeling strategies</em></li>
 </ol>
-<p>*As an additional note, this data was obtained from <a href="https://www.kaggle.com/c/catch-me-if-you-can-intruder-detection-through-webpage-session-tracking2/data">this Kaggle competition</a> used in some online communities (such as mlcourse.ai) as a teaching tool for aspiring machine learning engineers. The creators have specifically asked us former participants not to publish any well-performing kernels and keep the challenge for future students. Therefore, this article will omit certain elements to respect their wishes.</p>
+<p>As an additional note, this data was obtained from <a href="https://www.kaggle.com/c/catch-me-if-you-can-intruder-detection-through-webpage-session-tracking2/data">this Kaggle competition</a> used in some online communities (such as mlcourse.ai) as a teaching tool for aspiring machine learning engineers. The creators have specifically asked us former participants not to publish any well-performing kernels and keep the challenge for future students. Therefore, this article will omit certain elements to respect their wishes.</p>
 
 </div>
 </div>
@@ -13182,7 +13182,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>As a necessary step to pre-processing the data, we will import the contents from <code>train_sessions.csv</code> into a Pandas dataframe and immediately see how the data is presented. The important take-aways are column names, data types represented, and if null values are present. We can investigate these properties with the following code:</p>
+<p>As a necessary step to pre-process the data, we will import the contents from <code>train_sessions.csv</code> into a Pandas dataframe and immediately see how the data is presented. The important take-aways are column names, data types represented, and if null values are present. We can investigate these properties with the following code:</p>
 
 </div>
 </div>
@@ -13460,8 +13460,8 @@ memory usage: 42.6+ MB
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Within each row of our data, we see a <code>session_id</code> followed by the websites visted during this session (listed by site ID) along with their respective timestamps. Each web session tracks at most ten sites, after which the data is truncated. For sessions with less than ten sites, null values are placed in unused columns. Finally, a <code>target</code> column indicates whether the session user was authorized (1) or an intruder (0).</p>
-<p>There are a maximum of <em>253,561</em> entries in each column. However, some columns show less entries indicating where null values are present. Moreover, the <code>time</code> columns are seen as the <code>object</code> type rather than the more useful <code>datetime64</code>.</p>
+<p>Within each row of our data, we see a <code>session_id</code> followed by the websites visited during this session (listed by site ID) along with their respective timestamps. Each web session tracks at most ten sites, after which the data is truncated. For sessions with less than ten sites, null values are placed in unused columns. Finally, a <code>target</code> column indicates whether the session user was authorized (1) or an intruder (0).</p>
+<p>There is a maximum of <em>253,561</em> entries in each column. However, some columns show less entries indicating where null values are present. Moreover, the <code>time</code> columns are seen as the <code>object</code> type rather than the more useful <code>datetime64</code>.</p>
 <p>To transform this into a more useful dataset, let's perform the following:</p>
 <ul>
 <li>Convert the time columns to <code>datetime64</code></li>
@@ -13570,7 +13570,7 @@ memory usage: 32.9 MB
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Taking another look at the dataframe, we notice that data in the <code>time1</code> column is not in chronological order. It's good practice to sort the dataframe accordingly.</p>
+<p>Taking another look at the dataframe, we notice that data in the <code>time1</code> column is not in chronological order. Let's sort the dataframe accordingly.</p>
 
 </div>
 </div>
@@ -13776,7 +13776,7 @@ memory usage: 32.9 MB
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now that we have our training data in a more usable state, we can prepare our features for <strong>Part 2: Exploratory Data Analysis</strong>. As one final step before moving to the next section, let's separate the <code>target</code> column from the rest of the training data and store it as <code>y_train</code>. This gives us an independent dataframe to use in our models in <strong>Part 3</strong>. We will still keep a <em>combined</em> datarame to help with data visualization a bit later.</p>
+<p>Now that we have our training data in a more usable state, we can prepare our features for <strong>Part 2: Exploratory Data Analysis</strong>. As one final step before moving to the next section, let's separate the <code>target</code> column from the rest of the training data and store it as <code>y_train</code>. This gives us an independent dataframe to use in our models in <strong>Part 3</strong>. We will still keep a <em>combined</em> dataframe to help with data visualization a bit later.</p>
 
 </div>
 </div>
@@ -13826,7 +13826,7 @@ New train_data shape:  (253561, 21)
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Part-2:-Exploratory-Data-Analysis">Part 2: Exploratory Data Analysis<a class="anchor-link" href="#Part-2:-Exploratory-Data-Analysis">&#182;</a></h2><p>When we put data through a predictive machine learning model, whether it be logistic regression or a highly complex neural network, our end objective is always the same: to define the relationships between features that describe an occurance and the outcome of that occurance. In this way we want our "machines" to perform some cost analysis to determine how changes in the data affect our target state. However, this analysis is not without its trade-offs. As the complexity of these data trends increases, our algorithms require more time, processing power, and detailied structuring to build up a "knowledge" of both the low-level and high-level patterns.</p>
+<h2 id="Part-2:-Exploratory-Data-Analysis">Part 2: Exploratory Data Analysis<a class="anchor-link" href="#Part-2:-Exploratory-Data-Analysis">&#182;</a></h2><p>When we put data through a predictive machine learning model, whether it be logistic regression or a highly complex neural network, our end objective is always the same: to define the relationships between features that describe an occurrence and the outcome of that occurrence. In this way we want our "machines" to perform some cost analysis to determine how changes in the data affect our target state. However, this analysis is not without its trade-offs. As the complexity of these data trends increases, our algorithms require more time, processing power, and detailed structuring to build up a "knowledge" of both the low-level and high-level patterns.</p>
 <p>By exploring some of the more apparent patterns ourselves, we can essentially "pre-digest" the data before passing it along to our models. In a way, this provides a <em>learning boost</em> and allows algorithms more resources to define the harder-to-detect dependencies.</p>
 <p>The objective of this section is to define some of these higher-level trends without spending our models' algorithmic resources to do so. Let's begin by looking at the number of unique sites visited during all web sessions.</p>
 
@@ -13880,7 +13880,7 @@ There were 864 sites in common.
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Immediately, we can see that many of the 1,054 unique sites visited by the authorized user also showed up in the intruder's web session history -- 864 to be exact. Judging a web session by the number of websites previously visted by the true user may not be the best strategy when determining if that session was authorized, but perhaps accounting for the multitude of unique sites on the intruder's end may be useful when picking out the <em>unauthorized</em> web sessions. In other words, we may not know exactly when it's right, but we might be able to say when it's wrong.</p>
+<p>Immediately, we can see that many of the 1,054 unique sites visited by the authorized user also showed up in the intruder's web session history -- 864 to be exact. Judging a web session by the number of websites previously visited by the true user may not be the best strategy when determining if that session was authorized, but perhaps accounting for the multitude of unique sites on the intruder's end may be useful when picking out the <em>unauthorized</em> web sessions. In other words, we may not know exactly when it's right, but we might be able to say when it's wrong.</p>
 <p>Let's look at a sample of the websites present in the whole dataset. We have a pickle dictionary that equates site ID (as listed in our dataframe) with the actual web address.</p>
 
 </div>
@@ -14157,8 +14157,8 @@ The associated Site IDs are:
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>There are many sites that include "google" in the web address, but we don't know if it's charactaristic of either authorized or unauthorized web sessions to have one of these pages in the session history. In fact, we would need to consider the site IDs in each of the site columns to find a potential pattern -- not to mention other web address keywords that might be more useful.</p>
-<p>One way to help interpret this data is to encode the web address using some variation of the One-Hot Encoding technique. Essentially, if we can categorize instances of specific keywords/phrases present in a web address, our modeling algorithm may be able to find some underlying patterns involing those words and phrases. For this scenario, we want to use the <strong>Term frequency-inverse document frequency</strong>(Tf-idf) strategy to encode our web address information. By defining the n-grams (effectively, the number of words in a phrase) to be encoded, our model gains the ability to drop frequently used terms not unique to either user (like "google" and "com") while still considering more complex phrases (like "accounts google").</p>
+<p>There are many sites that include "google" in the web address, but we don't know if it's characteristic of either authorized or unauthorized web sessions to have one of these pages in the session history. In fact, we would need to consider the site IDs in each of the site columns to find a potential pattern -- not to mention other web address keywords that might be more useful.</p>
+<p>One way to help interpret this data is to encode the web address using some variation of the One-Hot Encoding technique. Essentially, if we can categorize instances of specific keywords/phrases present in a web address, our modeling algorithm may be able to find some underlying patterns involving those words and phrases. For this scenario, we want to use the <strong>Term frequency-inverse document frequency</strong>(Tf-idf) strategy to encode our web address information. By defining the n-grams (effectively, the number of words in a phrase) to be encoded, our model gains the ability to drop frequently used terms not unique to either user (like "google" and "com") while still considering more complex phrases (like "accounts google").</p>
 <p>To start this, we first need to replace the site IDs in each "site" column with their corresponding web addresses. We will create a new dictionary that inverts the keys and values of our original site ID dictionary and replace the site IDs in each relevant column accordingly.</p>
 
 </div>
@@ -14705,7 +14705,7 @@ $$(250,000)*(10,000)*(8\ \text{bytes}) = 20\ \text{GB of RAM}$$<p>Since our data
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Looking at these plots, it's easy to tell that the data is not linearly separable -- that is we can't draw a continuous straight line to separate the data by user. We can engineer some of our existing features to offer our models more relationships to consider. In this scenario, let's consider second-order polynomial interpretations involving the following  features: <code>session_mins</code>, <code>start_hour</code>, <code>start_month</code>, <code>start_day</code>.</p>
-<p>Using the scaler <code>PolynomialFeatures(degree=2, include_bias=False)</code>, we can create polynomial combinations of features with degree less than or equal to <code>2</code> without a bias term. For example, if we had features [a, b], the scaler would output [a, b, a<sup>2</sup>, a*b, b<sup>2</sup>]. In this way, our four features would output a total of 14 columns: 4x identity columns, 4x squared columns, and 6x interaction columns. Since we already have the four intial identity columns represented in our <code>train_times</code> dataframe, we can write a function that performs this polynomial operation but only outputs the 10 new  data columns. Additionally, we want to normalize these results for the same reasons we did so earlier.</p>
+<p>Using the scaler <code>PolynomialFeatures(degree=2, include_bias=False)</code>, we can create polynomial combinations of features with degree less than or equal to <code>2</code> without a bias term. For example, if we had features [a, b], the scaler would output [a, b, a<sup>2</sup>, a*b, b<sup>2</sup>]. In this way, our four features would output a total of 14 columns: 4x identity columns, 4x squared columns, and 6x interaction columns. Since we already have the four initial identity columns represented in our <code>train_times</code> dataframe, we can write a function that performs this polynomial operation but only outputs the 10 new  data columns. Additionally, we want to normalize these results for the same reasons we did so earlier.</p>
 
 </div>
 </div>
@@ -14742,7 +14742,7 @@ $$(250,000)*(10,000)*(8\ \text{bytes}) = 20\ \text{GB of RAM}$$<p>Since our data
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># We run the add_poly_feats() function with &#39;train_times&#39; to produce &#39;poly_train_times&#39;</span>
 <span class="n">poly_train_times</span> <span class="o">=</span> <span class="n">add_poly_feats</span><span class="p">(</span><span class="n">train_times</span><span class="p">)</span>
 
-<span class="c1"># The output should have 10 columns. Let&#39;s view the first 5 entries.</span>
+<span class="c1"># The output should have 10 columns. Let&#39;s view the first 5 entries</span>
 <span class="n">poly_train_times</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
@@ -14912,7 +14912,7 @@ $$(250,000)*(10,000)*(8\ \text{bytes}) = 20\ \text{GB of RAM}$$<p>Since our data
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Let's make one final dataset to feed into our models. As an alternative to providing just the original six columns and their polynomial interactions, let's add a layer of "human interpretation" to the time data.</p>
-<p>Since our modeling algorthims don't come pre-equipped with the knowledge of different times of day, the models don't regard activity at 7 a.m. as any more unusual than activity at 11 p.m. However, we as people might expect ebbs in activity during meal times, sleep hours, or other times in a day. At the very least, it's possible that the authorized user is more active  during certain times in the day or year than during others.</p>
+<p>Since our modeling algorithms don't come pre-equipped with the knowledge of different times of day, the models don't regard activity at 7 a.m. as any more unusual than activity at 11 p.m. However, we as people might expect ebbs in activity during meal times, sleep hours, or other times in a day. At the very least, it's possible that the authorized user is more active  during certain times in the day or year than during others.</p>
 <p>We can add represent this knowledge by creating a feature representing <em>time-of-day</em>. Consider the four categories 'morning', 'afternoon', 'evening', and 'night' -- each comprised of 6 hour segments. Defining these further, we have:</p>
 <ul>
 <li><code>morning</code> = 6a - 11:59a</li>
@@ -14975,7 +14975,7 @@ Min stop hour: 7, Max stop hour: 23
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">add_time_of_day_features</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Takes a dataframe, extracts the starting hour, and inteprets the time of day.</span>
+    <span class="sd">&#39;&#39;&#39;Takes a dataframe, extracts the starting hour, and interprets the time of day.</span>
 <span class="sd">     This function outputs a DataFrame with OHE vectorized data corresponding to the time of day defined as:</span>
 <span class="sd">    &quot;morning&quot;</span>
 <span class="sd">    &quot;afternoon&quot;</span>
@@ -15282,7 +15282,7 @@ Total unauthorized sessions: 251264
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This seems consistent with graphs in the pairplot that looked at each featuer with respect to start/stop hour. One additional trend of time-based information noticeable in the pairplot is that the authorized user's monthly activity is at its lowest between May through August. Similar to creating human-interpreted time-of-day classifications, let's create seasonal classes associated with two "working" seasons and one "rest" season.</p>
+<p>This seems consistent with graphs in the pairplot that looked at each feature with respect to start/stop hour. One additional trend of time-based information noticeable in the pairplot is that the authorized user's monthly activity is at its lowest between May through August. Similar to creating human-interpreted time-of-day classifications, let's create seasonal classes associated with two "working" seasons and one "rest" season.</p>
 <p>First, let's investigate the authorized users active months:</p>
 
 </div>
@@ -15339,7 +15339,7 @@ Total unauthorized sessions: 251264
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">add_time_of_year_features</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Takes a dataframe, extracts the starting month, and inteprets the time of year.</span>
+    <span class="sd">&#39;&#39;&#39;Takes a dataframe, extracts the starting month, and interprets the time of year.</span>
 <span class="sd">     This function outputs a DataFrame with OHE vectorized data corresponding to the time of day defined as:</span>
 <span class="sd">    &quot;spring&quot;</span>
 <span class="sd">    &quot;summer&quot;</span>
@@ -15464,7 +15464,7 @@ There are 251264 intruder points
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Once again, we see the difficulty of visualize imbalanced data...</p>
+<p>Once again, we see the difficultly in visualizing imbalanced data...</p>
 <p>Now that we have two categories of "human-interpreted" time features, we can append these new columns to the original tf-idf-encoded site-feature sparse matrix.</p>
 
 </div>
@@ -15571,7 +15571,7 @@ We now have three sparse matrices to feed into different classification models. 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>There are many techniques in the 'Classification Problem' toolbox, and there's no way to get to them all in one article. To give us a good sample of capabilites, let's take a look at these four popular strategies:</p>
+<p>There are many techniques in the 'Classification Problem' toolbox, and there's no way to get to them all in one article. To give us a good sample of capabilities, let's take a look at these four popular strategies:</p>
 <ol>
 <li><strong>Random Forests</strong></li>
 <li><strong>Logistic Regression</strong></li>
