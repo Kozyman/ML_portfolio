@@ -13835,7 +13835,7 @@ New train_data shape:  (253561, 21)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Use Pandas functions to filter a list of unique sites by authorized user and intruder</span>
@@ -13851,6 +13851,8 @@ New train_data shape:  (253561, 21)
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There were </span><span class="si">{}</span><span class="s1"> sites in common.&#39;</span>
       <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sites_in_common</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}% o</span><span class="s1">f websites visted by authorized user also visited by the intruder&#39;</span>
+      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sites_in_common</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">user_unique</span><span class="p">),</span> <span class="mi">4</span><span class="p">)))</span>
 </pre></div>
 
     </div>
@@ -13869,6 +13871,7 @@ New train_data shape:  (253561, 21)
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>The authorized user visited 1054 unique sites, while the intruder visited 41412 unique sites.
 There were 864 sites in common.
+81.97% of websites visted by authorized user also visited by the intruder
 </pre>
 </div>
 </div>
@@ -13880,7 +13883,7 @@ There were 864 sites in common.
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Immediately, we can see that many of the 1,054 unique sites visited by the authorized user also showed up in the intruder's web session history -- 864 to be exact. Judging a web session by the number of websites previously visited by the true user may not be the best strategy when determining if that session was authorized, but perhaps accounting for the multitude of unique sites on the intruder's end may be useful when picking out the <em>unauthorized</em> web sessions. In other words, we may not know exactly when it's right, but we might be able to say when it's wrong.</p>
+<p>Immediately, we can see that 864 of the 1,054 unique sites the authorized user visited also showed up in the intruder's web session history. The heavy overlap might make authorized web sessions hard to pick out. On the other hand, we may not know if a session is "good", but perhaps we might be able to determine when it's "bad".</p>
 <p>Let's look at a sample of the websites present in the whole dataset. We have a pickle dictionary that equates site ID (as listed in our dataframe) with the actual web address.</p>
 
 </div>
@@ -15509,38 +15512,38 @@ There are 251264 intruder points
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>In Summary</strong><br>
-We now have three sparse matrices to feed into different classification models. They are:</p>
-<ol>
-<li><code>train_sparse</code> = A matrix of Tf-Idf web address n-grams and normalized time features that include:<ul>
-<li>start_hour</li>
-<li>stop_hour</li>
-<li>start_day</li>
-<li>start_month</li>
-<li>year</li>
-<li>total_session_mins</li>
-</ul>
-</li>
-</ol>
-<ol>
-<li><code>train_poly_sparse</code> = A matrix of the above information that also includes 10 polynomial features (order=2) for:<ul>
-<li>start_hour</li>
-<li>start_day</li>
-<li>start_month</li>
-<li>total_session_mins </li>
-</ul>
-</li>
-</ol>
-<ol>
-<li><code>train_todtoy_sparse</code> = A matrix of Tf-idf web address n-grams with <em>time-of-day</em> and <em>time-of-year</em> features describing :<ul>
-<li>morning</li>
-<li>afternoon</li>
-<li>evening</li>
-<li>spring</li>
-<li>summer</li>
-<li>fall</li>
-</ul>
-</li>
-</ol>
+We now have three sparse matrices to feed into different classification models. They are:<br>
+I. <code>train_sparse</code> = A matrix of Tf-Idf web address n-grams and normalized time features that include:</p>
+
+<pre><code>-  start_hour
+-  stop_hour
+-  start_day
+-  start_month
+-  year
+-  total_session_mins
+
+
+</code></pre>
+<p>II. <code>train_poly_sparse</code> = A matrix of the above information that also includes 10 polynomial features (order=2) for:</p>
+
+<pre><code>-  start_hour
+-  start_day
+-  start_month
+-  total_session_mins 
+
+
+</code></pre>
+<p>III. <code>train_todtoy_sparse</code> = A matrix of Tf-idf web address n-grams with <em>time-of-day</em> and <em>time-of-year</em> features describing :</p>
+
+<pre><code>-  morning
+-  afternoon
+-  evening
+-  spring
+-  summer
+-  fall
+
+
+</code></pre>
 <p>We can put these into a dictionary to use in <strong>Part 3. Modeling and Testing</strong></p>
 
 </div>
