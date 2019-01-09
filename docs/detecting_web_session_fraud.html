@@ -13131,7 +13131,7 @@ div#notebook {
 <li><strong>Framing the problem</strong> - <em>you are here!</em></li>
 <li><strong>Data pre-processing</strong> - <em>we import and clean the raw data of errors, missing values, and unhelpful formats</em></li>
 <li><strong>Exploratory data analysis</strong> - <em>we identify trends, select features, and create our training datasets</em></li>
-<li><strong>Modeling and testing</strong> - <em>weigh the benefits (and detriments) of various modeling strategies</em></li>
+<li><strong>Modeling and testing</strong> - <em>we weigh the benefits (and detriments) of various modeling strategies</em></li>
 </ol>
 <p>As an additional note, this data was obtained from <a href="https://www.kaggle.com/c/catch-me-if-you-can-intruder-detection-through-webpage-session-tracking2/data">this Kaggle competition</a> used in some online communities (such as mlcourse.ai) as a teaching tool for aspiring machine learning engineers. The creators have specifically asked us former participants not to publish any well-performing kernels and keep the challenge for future students. Therefore, this article will omit certain elements to respect their wishes.</p>
 
@@ -15995,7 +15995,9 @@ I. <code>train_sparse</code> = A matrix of Tf-Idf web address n-grams and normal
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="3.4.-XGBoost">3.4. XGBoost<a class="anchor-link" href="#3.4.-XGBoost">&#182;</a></h3>
+<h3 id="3.4.-XGBoost">3.4. XGBoost<a class="anchor-link" href="#3.4.-XGBoost">&#182;</a></h3><p>Short for eXtreme Gradient Boosting, XGBoost is an open-source tool developed by Tianqi Chen that has become popular among garage data scientists and industry engineers alike. Known to be a fast and scalable technique, this tool combines the core aspects of random forests with the error-correcting power of <a href="https://www.coursera.org/learn/machine-learning/lecture/DoRHJ/stochastic-gradient-descent">gradient descent</a> for each tree predictor. In this way, the tree classifiers are continually improved, and the final model can perform surprisingly well even with un-engineered data.</p>
+<p>Let's see how this model performs:</p>
+
 </div>
 </div>
 </div>
@@ -16005,6 +16007,10 @@ I. <code>train_sparse</code> = A matrix of Tf-Idf web address n-grams and normal
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">run_xgb</span><span class="p">(</span><span class="n">train_dict</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Takes a dictionary of time-dependent datasets and associated target value (must be the same for all datasets) </span>
+<span class="sd">    and outputs an average cross-validation score from an XGBoost classifier model. </span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">xgb_scores</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># instantiate a list to keep track of cross-val scores</span>
     <span class="n">time_split</span> <span class="o">=</span> <span class="n">TimeSeriesSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># define a cross-val generator</span>
     <span class="n">xgbc</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBClassifier</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -16128,6 +16134,23 @@ I. <code>train_sparse</code> = A matrix of Tf-Idf web address n-grams and normal
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This technique performed better than almost every previous combination of dataset and model. In fact, we did not even need to provide engineered features for it to score well. Is this the panacea for all classification problems? Probably not, but I'm glad we have it in our toolkit.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Part-4.-Conclusion">Part 4. Conclusion<a class="anchor-link" href="#Part-4.-Conclusion">&#182;</a></h2><p>To wrap up, we looked at four different classification techniques to determine whether we could differentiate an authorized users web sessions from those of an intruder. Looking at three interpretations of the data, we found that these four algorithms each came with their advantages, but in the end there was a clear winner. For this particular problem, the XGBoost method was the best choice even without hyperparameter tuning.</p>
+<p>Here's a quick recap of the ROC-AUC scores for each model and dataset:</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[97]:</div>
@@ -16193,19 +16216,6 @@ I. <code>train_sparse</code> = A matrix of Tf-Idf web address n-grams and normal
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
 </div>
     </div>
   </div>
